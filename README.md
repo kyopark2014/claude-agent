@@ -12,6 +12,10 @@ pip install claude-agent-sdk
 
 ```java
 {
+    "awsAuthRefresh": "aws sso login --profile default",
+    "env": {
+      "AWS_PROFILE": "default"
+    }
     "env": {
       "CLAUDE_CODE_USE_BEDROCK": "1"
     }
