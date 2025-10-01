@@ -4,6 +4,8 @@
 
 ```text
 pip install claude-agent-sdk
+
+npm install -g @anthropic-ai/claude-code
 ```
 
 ## Reference 
