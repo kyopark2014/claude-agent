@@ -4,12 +4,13 @@
 
 ```text
 pip install claude-agent-sdk
-
-npm install -g @anthropic-ai/claude-code
 ```
 
 ## Reference 
 
 [Claude Agent SDK for Python](https://github.com/anthropics/claude-agent-sdk-python)
 
+[Amazon Bedrock에서 Claude Code](https://docs.claude.com/ko/docs/claude-code/amazon-bedrock)
+
+[Claude Code 설정](https://docs.claude.com/ko/docs/claude-code/settings)
 
