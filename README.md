@@ -27,6 +27,14 @@ pip install claude-agent-sdk
 
 ```text
 export CLAUDE_CODE_USE_BEDROCK=1
+export ANTHROPIC_MODEL='global.anthropic.claude-sonnet-4-5-20250929-v1:0'
+export ANTHROPIC_SMALL_FAST_MODEL='us.anthropic.claude-3-5-haiku-20241022-v1:0'
+```
+
+or
+
+```text
+export ANTHROPIC_MODEL='us.anthropic.claude-3-5-haiku-20241022-v1:0'
 ```
 
 
