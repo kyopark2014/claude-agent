@@ -1,10 +1,32 @@
 # Claude Agent
 
+## 사용준비 
+
 [Claude Agent SDK for Python](https://github.com/anthropics/claude-agent-sdk-python)와 같이 Claude Agent SDK를 설치합니다.
 
 ```text
 pip install claude-agent-sdk
 ```
+
+[Claude Code 설정](https://docs.claude.com/ko/docs/claude-code/settings)와 같이 사용자 설정을 위한 ~/.claude/settings.json 을 생성합니다. 만약 AWS CLI의 refresh가 필요하다면, [Bedrock 인증](https://docs.claude.com/ko/api/agent-sdk/overview#%EC%9D%B8%EC%A6%9D)을 참조하여 설정합니다.
+
+```java
+{
+    "env": {
+      "CLAUDE_CODE_USE_BEDROCK": "1"
+    }
+}
+```
+
+
+또는 아래와 같이 환경변수를 설정합니다.
+
+```text
+export CLAUDE_CODE_USE_BEDROCK=1
+```
+
+
+
 
 ## Reference 
 
