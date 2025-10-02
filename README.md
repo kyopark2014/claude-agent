@@ -4,7 +4,9 @@
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/5acf2313-a156-4ab2-9eb8-55e68f167936" />
 
-## Claude Agent SDK
+## Agent 
+
+### Claude Agent SDK
 
 [claude_agent.py](./application/claude_agent.py)와 같이 Claude Agent SDK를 활용할 수 있습니다. 먼저 아래와 같이 SDK를 import 합니다. ClaudeAgentOptions을 이용해 Agent를 설정하고, 실행을 위해 query를 사용하고, streaming 결과에서 필요한 정보를 추출하기 위하여 AssistantMessage, SystemMessage, UserMessage, TextBlock을 이용합니다. 또한 debugging등의 목적으로 tool 결과를 ToolUseBlock, ToolResultBlock을 이용합니다.
 
@@ -107,7 +109,7 @@ async for message in query(prompt=prompt, options=options):
                 add_notification(containers, f"Tool result: {block.content}")                
 ```
 
-## AWS MCP: use-aws
+### AWS MCP: use-aws
 
 [mcp_server_use_aws.py](./application/mcp_server_use_aws.py)에서는 아래와 같이 use_aws tool을 등록합니다. use_aws tool은 agent가 전달하는 service_name, operation_name, parameters를 받아서 실행하고 결과를 리턴합니다. service_name은 s3, ec2와 같은 서비스 명이며, operation_name은 list_buckets와 같은 AWS CLI 명령어 입니다. 또한, parameters는 이 명령어를 수행하는데 필요한 값입니다. 
 
@@ -140,7 +142,7 @@ def use_aws(service_name, operation_name, parameters, region, label, profile_nam
 
 
 
-## 사용 준비 
+### 사용 준비 
 
 아래와 같은 명령어로 credential을 설정합니다. 만약 AWS CLI가 설치되지 않았다면, [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)에 따라 설치후 credential을 설정합니다.
 
