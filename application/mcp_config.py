@@ -47,7 +47,7 @@ def load_config(mcp_type):
             }
         }
     
-    elif mcp_type == "use-aws (local)":
+    elif mcp_type == "use-aws":
         return {
             "mcpServers": {
                 "use-aws": {

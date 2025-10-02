@@ -46,8 +46,8 @@ with st.sidebar:
     st.title("🔮 Menu")
     
     st.markdown(
-        "Claude Agent SDK를 이용해 대화를 구현합니다.\n\n"
-        "여기에서는 MCP를 이용해 데이터를 수집하고, Multi agent를 이용해 다양한 기능을 구현합니다.\n\n"
+        "Claude Agent SDK를 이용해 대화를 구현합니다. "
+        "여기에서는 MCP를 이용해 데이터를 수집하고, Multi agent를 이용해 다양한 기능을 구현합니다. "
         "상세한 코드는 [Github](https://github.com/kyopark2014/claude-agent)을 참조하세요."
     )
 
@@ -200,6 +200,15 @@ def show_references(reference_docs):
             for i, doc in enumerate(reference_docs):
                 st.markdown(f"**{doc.metadata['name']}**: {doc.page_content}")
                 st.markdown("---")
+
+# Greet user
+if not st.session_state.greetings:
+    with st.chat_message("assistant"):
+        intro = "아마존 베드락을 이용하여 주셔서 감사합니다. Claude Agent SDK와 MCP를 이용하여 필요한 작업을 수행합니다."
+        st.markdown(intro)
+        # Add assistant response to chat history
+        st.session_state.messages.append({"role": "assistant", "content": intro})
+        st.session_state.greetings = True
 
 if clear_button or "messages" not in st.session_state:
     st.session_state.messages = []        
