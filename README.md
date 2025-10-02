@@ -166,6 +166,11 @@ cd claude-agent
 streamlit run application/app.py
 ```
 
+이때 아래와 같이 필요한 MCP 서버를 선택후 채팅창에 question을 넣고 실행할 수 있습니다.
+
+<img width="300" alt="image" src="https://github.com/user-attachments/assets/21be21c9-c475-412d-a4b1-c63f81d6f1c3" />
+
+
 
 ## 실행 결과
 
