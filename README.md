@@ -107,6 +107,39 @@ async for message in query(prompt=prompt, options=options):
                 add_notification(containers, f"Tool result: {block.content}")                
 ```
 
+## AWS MCP: use-aws
+
+[mcp_server_use_aws.py](./application/mcp_server_use_aws.py)에서는 아래와 같이 use_aws tool을 등록합니다. use_aws tool은 agent가 전달하는 service_name, operation_name, parameters를 받아서 실행하고 결과를 리턴합니다. service_name은 s3, ec2와 같은 서비스 명이며, operation_name은 list_buckets와 같은 AWS CLI 명령어 입니다. 또한, parameters는 이 명령어를 수행하는데 필요한 값입니다. 
+
+```python
+import use_aws as aws_utils
+
+@mcp.tool()
+def use_aws(service_name, operation_name, parameters, region, label, profile_name) -> Dict[str, Any]:
+    console = aws_utils.create()
+    available_operations = get_available_operations(service_name)
+
+    client = get_boto3_client(service_name, region, profile_name)
+    operation_method = getattr(client, operation_name)
+
+    response = operation_method(**parameters)
+    for key, value in response.items():
+        if isinstance(value, StreamingBody):
+            content = value.read()
+            try:
+                response[key] = json.loads(content.decode("utf-8"))
+            except json.JSONDecodeError:
+                response[key] = content.decode("utf-8")
+    return {
+        "status": "success",
+        "content": [{"text": f"Success: {str(response)}"}],
+    }
+```
+
+[use-aws](./application/use_aws.py)은 [use_aws.py](https://github.com/strands-agents/tools/blob/main/src/strands_tools/use_aws.py)의 MCP 버전입니다. 
+
+
+
 ## 사용 준비 
 
 아래와 같은 명령어로 credential을 설정합니다. 만약 AWS CLI가 설치되지 않았다면, [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)에 따라 설치후 credential을 설정합니다.
