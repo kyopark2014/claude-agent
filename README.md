@@ -2,9 +2,11 @@
 
 ## 사용준비 
 
-[Claude Agent SDK for Python](https://github.com/anthropics/claude-agent-sdk-python)와 같이 Claude Agent SDK를 설치합니다.
+[Claude Agent SDK for Python](https://github.com/anthropics/claude-agent-sdk-python)와 같이 Claude Code와 Claude Agent SDK를 설치합니다.
 
 ```text
+npm install -g @anthropic-ai/claude-code
+
 pip install claude-agent-sdk
 ```
 
