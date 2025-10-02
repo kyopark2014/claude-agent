@@ -7,7 +7,16 @@ import info
 import chat
 import mcp_config
 
-from claude_agent_sdk import query, ClaudeAgentOptions, SystemMessage, AssistantMessage, UserMessage, TextBlock, ToolResultBlock, ToolUseBlock
+from claude_agent_sdk import (
+    query,
+    ClaudeAgentOptions,
+    AssistantMessage,    
+    SystemMessage,
+    UserMessage,
+    TextBlock,
+    ToolResultBlock,
+    ToolUseBlock    
+)
 
 logging.basicConfig(
     level=logging.INFO,  # Default to INFO level
@@ -105,7 +114,6 @@ async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
             "If you don't know the answer, say you don't know."
         )
 
-    final_result = ""
     options = ClaudeAgentOptions(
         system_prompt=system,
         max_turns=100,
@@ -114,6 +122,7 @@ async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
         mcp_servers=server_params
     )
 
+    final_result = ""    
     async for message in query(prompt=prompt, options=options):
         # logger.info(message)
         if isinstance(message, SystemMessage):
