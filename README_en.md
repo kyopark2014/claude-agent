@@ -173,6 +173,25 @@ export ANTHROPIC_MODEL='us.anthropic.claude-sonnet-4-5-20250929-v1:0'
 export CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
 ```
 
+Now download the code as follows.
+
+```text
+git clone https://github.com/kyopark2014/claude-agent
+cd claude-agent
+```
+
+Now run the agent as follows.
+
+```python
+streamlit run application/app.py
+```
+
+At this point, select the required MCP servers as shown below, enter your question in the chat, and run.
+
+<img width="400" alt="image" src="https://github.com/user-attachments/assets/21be21c9-c475-412d-a4b1-c63f81d6f1c3" />
+
+
+
 ## Execution Results
 
 When you request generation of a report analyzing EKS status as shown below, you can query various AWS resources using the use-aws tool and create a report by summarizing them.
