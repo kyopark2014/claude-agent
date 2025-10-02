@@ -109,7 +109,7 @@ async for message in query(prompt=prompt, options=options):
 
 ## AWS MCP: use-aws
 
-[mcp_server_use_aws.py](./application/mcp_server_use_aws.py)에서는 아래와 같이 use_aws tool을 등록합니다. use_aws tool은 agent가 전달하는 service_name, operation_name, parameters를 받아서 실행하고 결과를 리턴합니다. service_name은 s3, ec2와 같은 서비스 명이며, operation_name은 list_buckets와 같은 AWS CLI 명령어 입니다. 또한, parameters는 이 명령어를 수행하는데 필요한 값입니다. 
+In [mcp_server_use_aws.py](./application/mcp_server_use_aws.py), the `use_aws` tool is registered as shown below. The `use_aws` tool receives `service_name`, `operation_name`, and `parameters` from the agent, executes the request, and returns the result. `service_name` is the AWS service name such as S3 or EC2, and `operation_name` is an AWS SDK/CLI operation such as `list_buckets`. `parameters` are the arguments required to run the operation.
 
 ```python
 import use_aws as aws_utils
@@ -136,7 +136,7 @@ def use_aws(service_name, operation_name, parameters, region, label, profile_nam
     }
 ```
 
-[use-aws](./application/use_aws.py)은 [use_aws.py](https://github.com/strands-agents/tools/blob/main/src/strands_tools/use_aws.py)의 MCP 버전입니다. 
+[use-aws](./application/use_aws.py) is the MCP version of [`use_aws.py`](https://github.com/strands-agents/tools/blob/main/src/strands_tools/use_aws.py).
 
 
 
