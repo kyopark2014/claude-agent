@@ -25,7 +25,7 @@ pip install claude-agent-sdk
 ```
 
 
-또는 아래와 같이 환경변수를 설정합니다.
+또는 아래와 같이 환경변수를 설정할 수 있습니다.
 
 ```text
 export CLAUDE_CODE_USE_BEDROCK=1
