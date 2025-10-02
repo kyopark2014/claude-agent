@@ -14,9 +14,9 @@ pip install claude-agent-sdk
 {
     "awsAuthRefresh": "aws sso login --profile default",
     "env": {
-      "AWS_PROFILE": "default"
-    }
-    "env": {
+      "CLAUDE_CODE_ENABLE_TELEMETRY": "1",
+      "OTEL_METRICS_EXPORTER": "otlp",
+      "AWS_PROFILE": "default",
       "CLAUDE_CODE_USE_BEDROCK": "1"
     }
 }
