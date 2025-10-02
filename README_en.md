@@ -177,8 +177,8 @@ export CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
 
 When you request generation of a report analyzing EKS status as shown below, you can query various AWS resources using the use-aws tool and create a report by summarizing them.
 
-<img width="728" height="753" alt="image" src="https://github.com/user-attachments/assets/85cc59a6-8664-4d01-b506-036b5b561178" />
 
+<img width="655" height="814" alt="image" src="https://github.com/user-attachments/assets/76e9365f-3d78-43ec-a05a-6b5f5981ea67" />
 
 
 
