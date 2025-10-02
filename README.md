@@ -35,6 +35,8 @@ export CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
 
 ## 실행 결과
 
+아래와 같이 EKS의 상태를 분석하는 리포트 생성을 요청하면, use-aws tool을 이용하여 AWS의 각종 리소스를 조회하고 요약하여 리포트를 작성할 수 있습니다.
+
 <img width="728" height="753" alt="image" src="https://github.com/user-attachments/assets/85cc59a6-8664-4d01-b506-036b5b561178" />
 
 
