@@ -1,6 +1,6 @@
 # Claude Agent
 
-여기서는 [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk-python)와 MCP를 이용하여 agent를 구현하고 활용하는 방법에 대해 설명합니다. 여기서는 agent는 AWS MCP인 use-aws, RAG를 위한 kb-retriever, code interpreter를 위한 repl-coder, AWS의 best practice를 조회할 수 있는 aws document와 같은 MCP 서버를 가지고 있습니다. MCP를 이용해 필요한 정보를 조회하거나 필요한 작업을 수행할 수 있습니다. Claude Agent는 multi turn으로 동작하므로 복잡한 작업에서 특히 좋은 성능을 보여줍니다.
+This repository explains how to implement and utilize agents using the [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk-python) and MCP. Here, the agent has MCP servers such as use-aws (an AWS MCP), kb-retriever (for RAG), repl-coder (for code interpreter), and aws document (which can query AWS best practices). Using MCP, you can retrieve necessary information or perform required tasks. Claude Agent operates in multi-turn mode, showing particularly good performance in complex tasks.
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/5acf2313-a156-4ab2-9eb8-55e68f167936" />
 
