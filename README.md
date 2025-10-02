@@ -1,6 +1,8 @@
 # Claude Agent
 
-여기서는 [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk-python)와 MCP를 이용하여 Agent를 생성하여 활용하는 방법에 대해 설명합니다.
+여기서는 [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk-python)와 MCP를 이용하여 Agent를 생성하여 활용하는 방법에 대해 설명합니다. 
+
+<img width="957" height="612" alt="image" src="https://github.com/user-attachments/assets/5acf2313-a156-4ab2-9eb8-55e68f167936" />
 
 ## Claude Agent SDK
 
