@@ -105,7 +105,7 @@ async for message in query(prompt=prompt, options=options):
                 add_notification(containers, f"Tool result: {block.content}")                
 ```
 
-## 사용준비 
+## 사용 준비 
 
 아래와 같은 명령어로 credential을 설정합니다. 만약 AWS CLI가 설치되지 않았다면, [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)에 따라 설치후 credential을 설정합니다.
 
