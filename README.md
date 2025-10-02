@@ -115,6 +115,7 @@ npm install -g @anthropic-ai/claude-code
 pip install claude-agent-sdk
 ```
 
+<!--
 [Claude Code 설정](https://docs.claude.com/ko/docs/claude-code/settings)와 같이 사용자 설정을 위한 ~/.claude/settings.json 을 생성합니다. 만약 AWS CLI의 refresh가 필요하다면, [Bedrock 인증](https://docs.claude.com/ko/api/agent-sdk/overview#%EC%9D%B8%EC%A6%9D)을 참조하여 설정합니다.
 
 ```java
@@ -129,7 +130,6 @@ pip install claude-agent-sdk
 }
 ```
 
-
 또는 아래와 같이 환경변수를 설정할 수 있습니다.
 
 ```text
@@ -137,6 +137,21 @@ export CLAUDE_CODE_USE_BEDROCK=1
 export ANTHROPIC_MODEL='us.anthropic.claude-sonnet-4-5-20250929-v1:0'
 export CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
 ```
+-->
+
+이제 아래와 같이 코드를 다운로드 합니다.
+
+```text
+git clone https://github.com/kyopark2014/claude-agent
+cd claude-agent
+```
+
+이제 아래와 같이 agent를 실행합니다.
+
+```python
+streamlit run application/app.py
+```
+
 
 ## 실행 결과
 
