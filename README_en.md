@@ -1,6 +1,8 @@
 # Claude Agent
 
-This document explains how to create and utilize an Agent using [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk-python) and MCP.
+This document explains how to implement and utilize agents using the [Claude Agent SDK](https://github.com/anthropics/claude-agent-sdk-python) and MCP. Here, the agent has MCP servers such as use-aws (an AWS MCP), kb-retriever (for RAG), repl-coder (for code interpreter), and aws document (which can query AWS best practices). Using MCP, you can retrieve necessary information or perform required tasks. Claude Agent operates in multi-turn mode, showing particularly good performance in complex tasks.
+
+<img width="800" alt="image" src="https://github.com/user-attachments/assets/5acf2313-a156-4ab2-9eb8-55e68f167936" />
 
 ## Claude Agent SDK
 
