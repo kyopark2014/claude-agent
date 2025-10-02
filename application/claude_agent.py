@@ -58,16 +58,19 @@ async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
                     add_notification(containers, f"{block.text}")
                     final_result = block.text
                 elif isinstance(block, ToolUseBlock):
-                    logger.info(f"tool_use_id: {block.id=}, name: {block.name}, input: {block.input}")
+                    logger.info(f"--> tool_use_id: {block.id=}, name: {block.name}, input: {block.input}")
+                    add_notification(containers, f"Tool name: {block.name}, input: {block.input}")
                 elif isinstance(block, ToolResultBlock):
-                    logger.info(f"tool_use_id: {block.tool_use_id=}, content: {block.content}")
+                    logger.info(f"--> tool_use_id: {block.tool_use_id=}, content: {block.content}")
+                    add_notification(containers, f"Tool result: {block.content}")
                 else:
                     logger.info(f"AssistantMessage: {block}")
                 
         elif isinstance(message, UserMessage):
             for block in message.content:
                 if isinstance(block, ToolResultBlock):
-                    logger.info(f"tool_use_id: {block.tool_use_id=}, content: {block.content}")
+                    logger.info(f"--> tool_use_id: {block.tool_use_id=}, content: {block.content}")
+                    add_notification(containers, f"Tool result: {block.content}")
                     
                     if isinstance(block.content, list):
                         for item in block.content:
