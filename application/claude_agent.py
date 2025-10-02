@@ -133,20 +133,25 @@ async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
             if "tools" in data:
                 tools = data["tools"]
                 logger.info(f"--> tools: {tools}")
-                add_notification(containers, f"Tools: {tools}")
+
+                if chat.debug_mode == 'Enable':
+                    add_notification(containers, f"Tools: {tools}")
 
         elif isinstance(message, AssistantMessage):
             for block in message.content:
                 if isinstance(block, TextBlock):
                     logger.info(f"--> TextBlock: {block.text}")
-                    add_notification(containers, f"{block.text}")
+                    if chat.debug_mode == 'Enable':
+                        add_notification(containers, f"{block.text}")
                     final_result = block.text
                 elif isinstance(block, ToolUseBlock):
                     logger.info(f"--> tool_use_id: {block.id=}, name: {block.name}, input: {block.input}")
-                    add_notification(containers, f"Tool name: {block.name}, input: {block.input}")
+                    if chat.debug_mode == 'Enable':
+                        add_notification(containers, f"Tool name: {block.name}, input: {block.input}")
                 elif isinstance(block, ToolResultBlock):
                     logger.info(f"--> tool_use_id: {block.tool_use_id=}, content: {block.content}")
-                    add_notification(containers, f"Tool result: {block.content}")
+                    if chat.debug_mode == 'Enable':
+                        add_notification(containers, f"Tool result: {block.content}")
                 else:
                     logger.info(f"AssistantMessage: {block}")
                 
@@ -154,7 +159,8 @@ async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
             for block in message.content:
                 if isinstance(block, ToolResultBlock):
                     logger.info(f"--> tool_use_id: {block.tool_use_id=}, content: {block.content}")
-                    add_notification(containers, f"Tool result: {block.content}")
+                    if chat.debug_mode == 'Enable':
+                        add_notification(containers, f"Tool result: {block.content}")
                     
                     if isinstance(block.content, list):
                         for item in block.content:

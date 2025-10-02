@@ -43,16 +43,9 @@ class SimpleChatMemory:
         self.messages = []
         
 from tavily import TavilyClient  
-from urllib import parse
-from pydantic.v1 import BaseModel, Field
-from langchain_core.output_parsers import StrOutputParser
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain_core.messages import HumanMessage, AIMessage, ToolMessage, AIMessageChunk
-from langchain_mcp_adapters.client import MultiServerMCPClient
-
+from langchain_core.messages import HumanMessage, AIMessage
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.store.memory import InMemoryStore
-from multiprocessing import Process, Pipe
 
 import logging
 import sys
@@ -86,13 +79,10 @@ s3_prefix = 'docs'
 s3_image_prefix = 'images'
 
 knowledge_base_name = projectName
-numberOfDocs = 4
 
 MSG_LENGTH = 100    
 
-doc_prefix = s3_prefix+'/'
-
-model_name = "Claude 3.5 Sonnet"
+model_name = "Claude 3.7 Sonnet"
 model_type = "claude"
 models = info.get_model_info(model_name)
 number_of_models = len(models)
@@ -101,12 +91,10 @@ debug_mode = "Enable"
 multi_region = "Disable"
 
 reasoning_mode = 'Disable'
-grading_mode = 'Disable'
-agent_type = 'langgraph'
-user_id = agent_type # for testing
+user_id = "claude_agent" 
 
-def update(modelName, debugMode, multiRegion, reasoningMode, gradingMode):    
-    global model_name, model_id, model_type, debug_mode, multi_region, reasoning_mode, grading_mode
+def update(modelName, debugMode, multiRegion, reasoningMode):    
+    global model_name, model_id, model_type, debug_mode, multi_region, reasoning_mode
     global models, user_id
 
     # load mcp.env    
@@ -132,11 +120,6 @@ def update(modelName, debugMode, multiRegion, reasoningMode, gradingMode):
         multi_region = multiRegion
         logger.info(f"multi_region: {multi_region}")
         mcp_env['multi_region'] = multi_region
-
-    if grading_mode != gradingMode:
-        grading_mode = gradingMode
-        logger.info(f"grading_mode: {grading_mode}")            
-        mcp_env['grading_mode'] = grading_mode
 
     # update mcp.env    
     utils.save_mcp_env(mcp_env)
