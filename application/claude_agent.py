@@ -12,36 +12,51 @@ logging.basicConfig(
         logging.StreamHandler(sys.stderr)
     ]
 )
-logger = logging.getLogger("hello_mcp")
+logger = logging.getLogger("claude_agent")
+
+index = 0
+def add_notification(containers, message):
+    global index
+
+    index += 1
+
+    if containers is not None:
+        containers['notification'][index].info(message)
+    index += 1
 
 os.environ["CLAUDE_CODE_USE_BEDROCK"] = "1"
 os.environ["CLAUDE_CODE_MAX_OUTPUT_TOKENS"] = "4096"
 
-prompt = "내 S3 bucket 사용 현황은?"
+#model="us.anthropic.claude-sonnet-4-5-20250929-v1:0",
+model="us.anthropic.claude-3-7-sonnet-20250219-v1:0"
 
-options = ClaudeAgentOptions(
-    system_prompt="You are a helpful assistant",
-    max_turns=100,
-    permission_mode="bypassPermissions",
-    #model="us.anthropic.claude-sonnet-4-5-20250929-v1:0",
-    model="us.anthropic.claude-3-7-sonnet-20250219-v1:0",
-    mcp_servers={
-        "use_aws": {
-            "type": "stdio",
-            "command": "python",
-            "args": ["-m", "mcp_server_use_aws"]
+async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
+    global index 
+    index = 0
+
+    final_result = ""
+    options = ClaudeAgentOptions(
+        system_prompt="You are a helpful assistant",
+        max_turns=100,
+        permission_mode="bypassPermissions",
+        model=model,
+        mcp_servers={
+            "use_aws": {
+                "type": "stdio",
+                "command": "python",
+                "args": ["-m", "mcp_server_use_aws"]
+            }
         }
-    }
-)
+    )
 
-async def main():
     async for message in query(prompt=prompt, options=options):
         # logger.info(message)
-
         if isinstance(message, AssistantMessage):
             for block in message.content:
                 if isinstance(block, TextBlock):
                     logger.info(f"--> TextBlock: {block.text}")
+                    add_notification(containers, f"{block.text}")
+                    final_result = block.text
                 elif isinstance(block, ToolUseBlock):
                     logger.info(f"tool_use_id: {block.id=}, name: {block.name}, input: {block.input}")
                 elif isinstance(block, ToolResultBlock):
@@ -63,4 +78,4 @@ async def main():
         else:
             logger.info(f"Message: {message}")
 
-anyio.run(main)
+    return final_result, []
