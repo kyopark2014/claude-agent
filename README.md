@@ -33,6 +33,10 @@ export ANTHROPIC_MODEL='us.anthropic.claude-sonnet-4-5-20250929-v1:0'
 export CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
 ```
 
+## 실행 결과
+
+<img width="728" height="753" alt="image" src="https://github.com/user-attachments/assets/85cc59a6-8664-4d01-b506-036b5b561178" />
+
 
 
 
