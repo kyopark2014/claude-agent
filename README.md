@@ -107,6 +107,20 @@ async for message in query(prompt=prompt, options=options):
 
 ## 사용준비 
 
+아래와 같은 명령어로 credential을 설정합니다. 만약 AWS CLI가 설치되지 않았다면, [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)에 따라 설치후 credential을 설정합니다.
+
+```text
+aws configure
+```
+
+만약 workshop용 테스트 계정이라면 아래와 같이 설정합니다.
+
+```python
+aws configure set aws_access_key_id EXAMS3W4F4PXQPNBSBX1
+aws configure set aws_secret_access_key 12345keypKY8+PjqMcIsd6ekBihuBZ8s108aLUB
+aws configure set aws_session_token 12345JpZ2luX2VjENf//////////wEaCXVzLWVhc3QtMSJIMEYCIQClUKSzIECB0539JSN4aTrhexamplehr/YZeVU0OWiTMtXHwOXKpECCF8QAhoMMTY2ODkxNzM4MDk1IgznJKQqAdztbP5ZMFMq7gGJAxf9ktRKhcZgdZA2cmTzPoBzqQ+YbIJ2dnPkq+Hz33yUuMda5HAFedTtgq7RTTQbtFsJIJGQTwrsJ8akumUCuOjmzLpE1VUhiBqmO+nbrJk4Xhmxvi0c2hPx98eiDLdDfr6R1iCW4nZtUrQmMWsNS5LUDNtTWwVipuXTnNxs/y+AWa/ugsHQiUArsGuy54MYmZkIuXW9pbwxjAingPz5fKJedtI4J2P99NCL8dYlPaYlb0qXGoHT90k9ehjRKvbiAR9tk
+```
+
 [Claude Agent SDK for Python](https://github.com/anthropics/claude-agent-sdk-python)와 같이 Claude Code와 Claude Agent SDK를 설치합니다.
 
 ```text
