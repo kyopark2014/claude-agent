@@ -60,19 +60,11 @@ The generated server information is in the following JSON format.
 Now, prepare a system prompt suitable for the purpose as shown below and define [ClaudeAgentOptions](https://github.com/anthropics/claude-agent-sdk-python?tab=readme-ov-file#using-tools). At this time, set the maximum number of turns, user confirmation bypass, model ID, and server information. 
 
 ```python
-if isKorean(prompt):
-    system = (
-        "Your name is Seoyeon, and you are a conversational AI designed to answer questions in a friendly manner."
-        "Provide sufficient specific details appropriate for the situation."
-        "If you don't know the answer to a question, honestly say you don't know."
-        "Please respond in Korean."
-    )
-else:
-    system = (
-        "You are a helpful assistant"
-        "Provide sufficient specific details for the situation."
-        "If you don't know the answer, say you don't know."
-    )
+system = (
+    "You are a helpful assistant"
+    "Provide sufficient specific details for the situation."
+    "If you don't know the answer, say you don't know."
+)
 
 options = ClaudeAgentOptions(
     system_prompt=system,
