@@ -6,6 +6,8 @@ This document explains how to implement and utilize agents using the [Claude Age
 
 ## Claude Agent SDK
 
+### Basic
+
 You can utilize the Claude Agent SDK as shown in [claude_agent.py](./application/claude_agent.py). First, import the SDK as shown below. Use ClaudeAgentOptions to configure the Agent, use query for execution, and use AssistantMessage, SystemMessage, UserMessage, TextBlock to extract necessary information from streaming results. Also use ToolUseBlock, ToolResultBlock for tool results for debugging purposes.
 
 ```python
@@ -107,6 +109,33 @@ async for message in query(prompt=prompt, options=options):
                 add_notification(containers, f"Tool result: {block.content}")                
 ```
 
+### Session Management
+
+Previous history can be managed as a session. You can get the session-id from the System message as shown below.
+
+```python
+session-id = None
+async for message in query(prompt=prompt, options=options):
+    if isinstance(message, SystemMessage):
+        subtype = message.subtype
+        if subtype == "init":
+            session_id = message.data.get('session_id')
+            logger.info(f"Session started with ID: {session_id}")
+```
+
+You can resume the agent using this session-id.
+
+```python
+options = ClaudeAgentOptions(
+    system_prompt=system,
+    max_turns=100,
+    permission_mode="bypassPermissions",
+    model=get_model_id(),
+    mcp_servers=server_params,
+    resume=session_id
+)
+```
+
 ## AWS MCP: use-aws
 
 In [mcp_server_use_aws.py](./application/mcp_server_use_aws.py), the `use_aws` tool is registered as shown below. The `use_aws` tool receives `service_name`, `operation_name`, and `parameters` from the agent, executes the request, and returns the result. `service_name` is the AWS service name such as S3 or EC2, and `operation_name` is an AWS SDK/CLI operation such as `list_buckets`. `parameters` are the arguments required to run the operation.
@@ -139,6 +168,22 @@ def use_aws(service_name, operation_name, parameters, region, label, profile_nam
 [use-aws](./application/use_aws.py) is the MCP version of [`use_aws.py`](https://github.com/strands-agents/tools/blob/main/src/strands_tools/use_aws.py).
 
 
+
+### Setup Preparation
+
+Set up credentials with the following commands. If AWS CLI is not installed, install it according to [Install AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and then set up credentials.
+
+```text
+aws configure
+```
+
+If it's a test account for workshops, set it up as follows.
+
+```python
+aws configure set aws_access_key_id EXAMS3W4F4PXQPNBSBX1
+aws configure set aws_secret_access_key 12345keypKY8+PjqMcIsd6ekBihuBZ8s108aLUB
+aws configure set aws_session_token 12345JpZ2luX2VjENf//////////wEaCXVzLWVhc3QtMSJIMEYCIQClUKSzIECB0539JSN4aTrhexamplehr/YZeVU0OWiTMtXHwOXKpECCF8QAhoMMTY2ODkxNzM4MDk1IgznJKQqAdztbP5ZMFMq7gGJAxf9ktRKhcZgdZA2cmTzPoBzqQ+YbIJ2dnPkq+Hz33yUuMda5HAFedTtgq7RTTQbtFsJIJGQTwrsJ8akumUCuOjmzLpE1VUhiBqmO+nbrJk4Xhmxvi0c2hPx98eiDLdDfr6R1iCW4nZtUrQmMWsNS5LUDNtTWwVipuXTnNxs/y+AWa/ugsHQiUArsGuy54MYmZkIuXW9pbwxjAingPz5fKJedtI4J2P99NCL8dYlPaYlb0qXGoHT90k9ehjRKvbiAR9tk
+```
 
 ## Setup
 
@@ -190,6 +235,14 @@ At this point, select the required MCP servers as shown below, enter your questi
 
 <img width="400" alt="image" src="https://github.com/user-attachments/assets/21be21c9-c475-412d-a4b1-c63f81d6f1c3" />
 
+### Tips
+
+The method to check available models is as follows.
+
+```text
+aws bedrock list-foundation-models --region=us-west-2 --by-provider anthropic --query "modelSummaries[*].modelId"
+```
+
 
 
 ## Execution Results
@@ -202,6 +255,8 @@ When you request generation of a report analyzing EKS status as shown below, you
 
 
 ## Reference 
+
+[Agent SDK overview](https://docs.claude.com/en/api/agent-sdk/overview)
 
 [Claude Agent SDK for Python](https://github.com/anthropics/claude-agent-sdk-python)
 
