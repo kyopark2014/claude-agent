@@ -240,14 +240,6 @@ def get_chat(extended_thinking):
 
     return chat
 
-def print_doc(i, doc):
-    if len(doc.page_content)>=100:
-        text = doc.page_content[:100]
-    else:
-        text = doc.page_content
-            
-    logger.info(f"{i}: {text}, metadata:{doc.metadata}")
-
 reference_docs = []
 
 secretsmanager = boto3.client(
@@ -273,57 +265,6 @@ def get_weather_api_key():
 
     return weather_api_key
 
-def get_langsmith_api_key():
-    # api key to use LangSmith
-    langsmith_api_key = langchain_project = ""
-    try:
-        get_langsmith_api_secret = secretsmanager.get_secret_value(
-            SecretId=f"langsmithapikey-{projectName}"
-        )
-        #print('get_langsmith_api_secret: ', get_langsmith_api_secret)
-        secret = json.loads(get_langsmith_api_secret['SecretString'])
-        #print('secret: ', secret)
-        langsmith_api_key = secret['langsmith_api_key']
-        langchain_project = secret['langchain_project']
-    except Exception as e:
-        logger.info(f"langsmith api key is required: {e}")
-        pass
-
-    return langsmith_api_key, langchain_project
-
-langsmith_api_key, langchain_project = get_langsmith_api_key()
-if langsmith_api_key and langchain_project:
-    os.environ["LANGCHAIN_API_KEY"] = langsmith_api_key
-    os.environ["LANGCHAIN_TRACING_V2"] = "true"
-    os.environ["LANGCHAIN_PROJECT"] = langchain_project
-
-def tavily_search(query, k):
-    docs = []    
-    try:
-        tavily_client = TavilyClient(api_key=utils.tavily_key)
-        response = tavily_client.search(query, max_results=k)
-        # print('tavily response: ', response)
-            
-        for r in response["results"]:
-            name = r.get("title")
-            if name is None:
-                name = 'WWW'
-            
-            docs.append(
-                Document(
-                    page_content=r.get("content"),
-                    metadata={
-                        'name': name,
-                        'url': r.get("url"),
-                        'from': 'tavily'
-                    },
-                )
-            )                   
-    except Exception as e:
-        logger.info(f"Exception: {e}")
-
-    return docs
-
 def isKorean(text):
     # check korean
     pattern_hangul = re.compile('[\u3131-\u3163\uac00-\ud7a3]+')
@@ -337,86 +278,3 @@ def isKorean(text):
         # logger.info(f"Not Korean:: {word_kor}")
         return False
     
-def traslation(chat, text, input_language, output_language):
-    system = (
-        "You are a helpful assistant that translates {input_language} to {output_language} in <article> tags." 
-        "Put it in <result> tags."
-    )
-    human = "<article>{text}</article>"
-    
-    prompt = ChatPromptTemplate.from_messages([("system", system), ("human", human)])
-    # print('prompt: ', prompt)
-    
-    chain = prompt | chat    
-    try: 
-        result = chain.invoke(
-            {
-                "input_language": input_language,
-                "output_language": output_language,
-                "text": text,
-            }
-        )
-        
-        msg = result.content
-        # print('translated text: ', msg)
-    except Exception:
-        err_msg = traceback.format_exc()
-        logger.info(f"error message: {err_msg}")     
-        raise Exception ("Not able to request to LLM")
-
-    return msg[msg.find('<result>')+8:len(msg)-9] # remove <result> tag
-
-def get_parallel_processing_chat(models, selected):
-    global model_type
-    profile = models[selected]
-    bedrock_region =  profile['bedrock_region']
-    modelId = profile['model_id']
-    model_type = profile['model_type']
-    maxOutputTokens = 4096
-    logger.info(f'selected_chat: {selected}, bedrock_region: {bedrock_region}, modelId: {modelId}, model_type: {model_type}')
-
-    if profile['model_type'] == 'nova':
-        STOP_SEQUENCE = '"\n\n<thinking>", "\n<thinking>", " <thinking>"'
-    elif profile['model_type'] == 'claude':
-        STOP_SEQUENCE = "\n\nHuman:" 
-    elif profile['model_type'] == 'openai':
-        STOP_SEQUENCE = "" 
-                          
-    # bedrock   
-    boto3_bedrock = boto3.client(
-        service_name='bedrock-runtime',
-        region_name=bedrock_region,
-        config=Config(
-            retries = {
-                'max_attempts': 30
-            }
-        )
-    )
-
-    if profile['model_type']:
-        parameters = {
-            "max_tokens":maxOutputTokens,     
-            "temperature":0.1,
-            "top_k":250,
-            "top_p":0.9,
-            "stop_sequences": [STOP_SEQUENCE]
-        }
-
-    chat = ChatBedrock(   # new chat model
-        model_id=modelId,
-        client=boto3_bedrock, 
-        model_kwargs=parameters,
-    )        
-    
-    return chat
-
-def print_doc(i, doc):
-    if len(doc.page_content)>=100:
-        text = doc.page_content[:100]
-    else:
-        text = doc.page_content
-            
-    logger.info(f"{i}: {text}, metadata:{doc.metadata}")
-
-fileId = uuid.uuid4().hex
-

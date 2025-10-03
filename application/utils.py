@@ -3,6 +3,7 @@ import sys
 import json
 import boto3
 import os
+import s3vector
 
 logging.basicConfig(
     level=logging.INFO,  # Default to INFO level
@@ -46,6 +47,30 @@ bedrock_region = config['region']
 projectName = config['projectName']
 bedrock_region = config['region']
 accountId = config.get('accountId')
+
+# Bucket for Knowledge Base
+bucket_name = config.get("bucket_name", "")
+logger.info(f"bucket_name: {bucket_name}")
+
+if not bucket_name:
+    bucket_name = f"storage-for-{projectName}-{accountId}-{bedrock_region}"
+    config['bucket_name'] = bucket_name
+    logger.info(f"bucket_name: {bucket_name}")
+    
+    s3vector.create_bucket(bucket_name, bedrock_region)
+    
+    # write bucket name
+    with open(config_path, "w", encoding="utf-8") as f:
+        json.dump(config, f, indent=2)
+
+# Knowledge Base
+knowledge_base_id = config.get('knowledge_base_id', "")
+logger.info(f"knowledge_base_id: {knowledge_base_id}")    
+if not knowledge_base_id:
+    logger.info(f"knowledge_base_id is required.")    
+    knowledge_base_name = projectName
+    logger.info(f"knowledge_base_name: {knowledge_base_name}")
+    s3vector.create_knowledge_base(knowledge_base_name, bedrock_region)
 
 def get_contents_type(file_name):
     if file_name.lower().endswith((".jpg", ".jpeg")):
