@@ -282,3 +282,8 @@ aws bedrock list-foundation-models --region=us-west-2 --by-provider anthropic --
 [System Prompts](https://docs.claude.com/en/release-notes/system-prompts#september-29-2025)
 
 [Claude Code 소개](https://www.linkedin.com/posts/gb-jeong_lg-ai-%EB%A6%AC%EC%84%9C%EC%B9%98%EC%97%90%EC%84%9C-claude-code-%EC%84%B8%EB%AF%B8%EB%82%98%EB%A5%BC-%ED%96%88%EC%8A%B5%EB%8B%88%EB%8B%A4-%EB%91%90-%EC%8B%9C%EA%B0%84-%EC%84%B8%EB%AF%B8%EB%82%98-activity-7379535599906693121-3cM4/?utm_source=share&utm_medium=member_android&rcm=ACoAAA5jTp0BX-JuOkof3Ak56U3VlXjQVT43NzQ)
+
+[Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)
+
+
+
