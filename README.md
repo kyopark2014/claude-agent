@@ -4,9 +4,9 @@
 
 <img width="800" alt="image" src="https://github.com/user-attachments/assets/5acf2313-a156-4ab2-9eb8-55e68f167936" />
 
-## Agent 
+## Claude Agent SDK 
 
-### Claude Agent SDK
+### Basic 
 
 [claude_agent.py](./application/claude_agent.py)와 같이 Claude Agent SDK를 활용할 수 있습니다. 먼저 아래와 같이 SDK를 import 합니다. ClaudeAgentOptions을 이용해 Agent를 설정하고, 실행을 위해 query를 사용하고, streaming 결과에서 필요한 정보를 추출하기 위하여 AssistantMessage, SystemMessage, UserMessage, TextBlock을 이용합니다. 또한 debugging등의 목적으로 tool 결과를 ToolUseBlock, ToolResultBlock을 이용합니다.
 
@@ -107,6 +107,33 @@ async for message in query(prompt=prompt, options=options):
         for block in message.content:
             if isinstance(block, ToolResultBlock):
                 add_notification(containers, f"Tool result: {block.content}")                
+```
+
+### Session Management
+
+이전 history를 session으로 관리할 수 있습니다. System message에서 아래와 같이 session-id를 가져올 수 있습니다.
+
+```python
+session-id = None
+async for message in query(prompt=prompt, options=options):
+    if isinstance(message, SystemMessage):
+        subtype = message.subtype
+        if subtype == "init":
+            session_id = message.data.get('session_id')
+            logger.info(f"Session started with ID: {session_id}")
+```
+
+이때의 session-id를 이용하여 agent에서 resume을 할 수 있습니다.
+
+```python
+options = ClaudeAgentOptions(
+    system_prompt=system,
+    max_turns=100,
+    permission_mode="bypassPermissions",
+    model=get_model_id(),
+    mcp_servers=server_params,
+    resume=session_id
+)
 ```
 
 ### AWS MCP: use-aws
