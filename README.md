@@ -279,3 +279,4 @@ aws bedrock list-foundation-models --region=us-west-2 --by-provider anthropic --
 
 [Claude Code 설정](https://docs.claude.com/ko/docs/claude-code/settings)
 
+[System Prompts](https://docs.claude.com/en/release-notes/system-prompts#september-29-2025)
