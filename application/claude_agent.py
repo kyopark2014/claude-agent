@@ -88,9 +88,13 @@ def isKorean(text):
         # logger.info(f"Not Korean:: {word_kor}")
         return False
 
+session_id = None
+
 async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
-    global index 
+    global index, session_id
     index = 0
+
+    logger.info(f"history_mode: {history_mode}")
 
     logger.info(f"mcp_servers: {mcp_servers}")
 
@@ -114,22 +118,38 @@ async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
             "If you don't know the answer, say you don't know."
         )
 
-    options = ClaudeAgentOptions(
-        system_prompt=system,
-        max_turns=100,
-        permission_mode="bypassPermissions",
-        model=get_model_id(),
-        mcp_servers=server_params
-    )
-
+    logger.info(f"session_id: {session_id}")
+    if session_id is not None and history_mode == "Enable":
+        options = ClaudeAgentOptions(
+            system_prompt=system,
+            max_turns=100,
+            permission_mode="bypassPermissions",
+            model=get_model_id(),
+            mcp_servers=server_params,
+            resume=session_id
+        )
+    else:
+       options = ClaudeAgentOptions(
+            system_prompt=system,
+            max_turns=100,
+            permission_mode="bypassPermissions",
+            model=get_model_id(),
+            mcp_servers=server_params
+        ) 
+    
     final_result = ""    
     async for message in query(prompt=prompt, options=options):
         # logger.info(message)
         if isinstance(message, SystemMessage):
+            logger.info(f"SystemMessage: {message}")
             subtype = message.subtype
             data = message.data
             logger.info(f"SystemMessage: type={subtype}")
 
+            if subtype == "init":
+                session_id = message.data.get('session_id')
+                logger.info(f"Session started with ID: {session_id}")
+                
             if "tools" in data:
                 tools = data["tools"]
                 logger.info(f"--> tools: {tools}")
