@@ -1,12 +1,10 @@
 import re
 import base64
 import logging
-import traceback
-import chat 
 import sys
 import uuid
+import os
 
-from urllib import parse
 from langchain_experimental.tools import PythonAstREPLTool
 from io import BytesIO
 
@@ -70,30 +68,21 @@ print(image_base64)
     logger.info(f"code: {code}")
     
     image_url = ""
-    try:     
-        resp = repl.run(code)
 
-        base64Img = resp
-        
-        if base64Img:
-            byteImage = BytesIO(base64.b64decode(base64Img))
+    base64Img = repl.run(code)
+    
+    if base64Img:
+        byteImage = BytesIO(base64.b64decode(base64Img))
 
-            image_name = generate_short_uuid()+'.png'
-            url = chat.upload_to_s3(byteImage, image_name)
-            logger.info(f"url: {url}")
+        image_name = generate_short_uuid()+'.png'
 
-            file_name = url[url.rfind('/')+1:]
-            logger.info(f"file_name: {file_name}")
+        os.makedirs('contents', exist_ok=True)
+        file_path = os.path.join('contents', image_name)
+        with open(file_path, 'wb') as f:
+            f.write(byteImage.getvalue())
 
-            image_url = chat.path+'/'+chat.s3_image_prefix+'/'+parse.quote(file_name)
-            logger.info(f"image_url: {image_url}")
-
-            # im = Image.open(BytesIO(base64.b64decode(base64Img)))  # for debuuing
-            # im.save(image_name, 'PNG')
-
-    except Exception:
-        err_msg = traceback.format_exc()
-        logger.info(f"error message: {err_msg}")
+        image_url = file_path
+        logger.info(f"image_url: {image_url}")
 
     return {
         "path": image_url

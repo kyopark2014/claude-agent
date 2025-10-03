@@ -124,6 +124,42 @@ secretsmanager = boto3.client(
     region_name=bedrock_region
 )
 
+def save_secret(secret_name, api_key_name, secret_value):
+    try:        
+        session = boto3.Session()
+        client = session.client('secretsmanager', region_name=bedrock_region)
+        
+        # Create secret value with bearer_key 
+        secret_value = {
+            "project_name": projectName,
+            api_key_name: secret_value
+        }
+        
+        # Convert to JSON string
+        secret_string = json.dumps(secret_value)
+        
+        # Check if secret already exists
+        try:
+            client.describe_secret(SecretId=secret_name)
+            # Secret exists, update it
+            client.put_secret_value(
+                SecretId=secret_name,
+                SecretString=secret_string
+            )
+            print(f"update api key for {api_key_name}")
+        except client.exceptions.ResourceNotFoundException:
+            # Secret doesn't exist, create it
+            client.create_secret(
+                Name=secret_name,
+                SecretString=secret_string,
+                Description=f"{api_key_name} of {projectName}"
+            )
+            print(f"create api key for {api_key_name}")
+            
+    except Exception as e:
+        print(f"Error saving api key: {e}")
+        pass
+
 # api key for weather
 def get_weather_api_key():
     weather_api_key = ""
@@ -137,10 +173,14 @@ def get_weather_api_key():
         weather_api_key = secret['weather_api_key']
 
     except Exception as e:
-        # raise e
+        logger.info(f"Weather API key is required: {e}")
+        save_secret(f"openweathermap-{projectName}", "weather_api_key", weather_api_key)
         pass
     
     return weather_api_key
+
+weather_api_key = get_weather_api_key()
+logger.info(f"weather_api_key: {weather_api_key}")
 
 def get_tavily_api_key():
     # api key to use Tavily Search
@@ -158,7 +198,10 @@ def get_tavily_api_key():
 
     except Exception as e: 
         logger.info(f"Tavily credential is required: {e}")
-        # raise e
+        save_secret(f"tavilyapikey-{projectName}", "tavily_api_key", tavily_key)
         pass
 
     return tavily_key
+
+tavily_key = get_tavily_api_key()
+logger.info(f"tavily_key: {tavily_key}")

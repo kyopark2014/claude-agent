@@ -1,24 +1,6 @@
-import traceback
-import boto3
-import os
-import json
 import re
-import uuid
-import base64
 import info 
-import PyPDF2
-import csv
 import utils
-import mcp_config
-import random
-import string
-
-from io import BytesIO
-from PIL import Image
-from langchain_aws import ChatBedrock
-from botocore.config import Config
-from langchain_core.prompts import MessagesPlaceholder, ChatPromptTemplate
-from langchain_core.documents import Document
 
 # Simple memory class to replace ConversationBufferWindowMemory
 class SimpleMemory:
@@ -178,92 +160,7 @@ def save_chat_history(text, msg):
         else:
             memory_chain.chat_memory.add_ai_message(msg) 
 
-selected_chat = 0
-def get_chat(extended_thinking):
-    global selected_chat, model_type
-
-    logger.info(f"models: {models}")
-    logger.info(f"selected_chat: {selected_chat}")
-    
-    profile = models[selected_chat]
-    # print('profile: ', profile)
-        
-    bedrock_region =  profile['bedrock_region']
-    modelId = profile['model_id']
-    model_type = profile['model_type']
-    if model_type == 'claude':
-        maxOutputTokens = 4096 # 4k
-    else:
-        maxOutputTokens = 5120 # 5k
-    number_of_models = len(models)
-
-    logger.info(f"LLM: {selected_chat}, bedrock_region: {bedrock_region}, modelId: {modelId}, model_type: {model_type}")
-
-    if profile['model_type'] == 'nova':
-        STOP_SEQUENCE = '"\n\n<thinking>", "\n<thinking>", " <thinking>"'
-    elif profile['model_type'] == 'claude':
-        STOP_SEQUENCE = "\n\nHuman:" 
-    elif profile['model_type'] == 'openai':
-        STOP_SEQUENCE = "" 
-                          
-    boto3_bedrock = boto3.client(
-        service_name='bedrock-runtime',
-        region_name=bedrock_region,
-        config=Config(
-            retries = {
-                'max_attempts': 30
-            }
-        )
-    )
-
-    parameters = {
-        "max_tokens":maxOutputTokens,     
-        "temperature":0.1,
-        "top_k":250,
-        "top_p":0.9,
-        "stop_sequences": [STOP_SEQUENCE]
-    }
-
-    chat = ChatBedrock(   # new chat model
-        model_id=modelId,
-        client=boto3_bedrock, 
-        model_kwargs=parameters,
-        region_name=bedrock_region
-    )
-    
-    if multi_region=='Enable':
-        selected_chat = selected_chat + 1
-        if selected_chat == number_of_models:
-            selected_chat = 0
-    else:
-        selected_chat = 0
-
-    return chat
-
 reference_docs = []
-
-secretsmanager = boto3.client(
-    service_name='secretsmanager',
-    region_name=bedrock_region,
-)
-
-# api key for weather
-def get_weather_api_key():
-    weather_api_key = ""
-    try:
-        get_weather_api_secret = secretsmanager.get_secret_value(
-            SecretId=f"openweathermap-{projectName}"
-        )
-        #print('get_weather_api_secret: ', get_weather_api_secret)
-        secret = json.loads(get_weather_api_secret['SecretString'])
-        #print('secret: ', secret)
-        weather_api_key = secret['weather_api_key']
-
-    except Exception as e:
-        logger.info(f"weather api key is required: {e}")
-        pass
-
-    return weather_api_key
 
 def isKorean(text):
     # check korean

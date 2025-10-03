@@ -1,4 +1,4 @@
-import anyio
+import json
 import re
 import logging
 import sys
@@ -93,6 +93,7 @@ session_id = None
 async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
     global index, session_id
     index = 0
+    image_url = []
 
     logger.info(f"history_mode: {history_mode}")
 
@@ -186,9 +187,14 @@ async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
                         for item in block.content:
                             if isinstance(item, dict) and "text" in item:
                                 logger.info(f"--> ToolResult: {item['text']}")
+                                if "path" in item['text']:
+                                    json_path = json.loads(item['text'])
+                                    path = json_path.get('path', "")
+                                    logger.info(f"path: {path}")
+                                    image_url.append(path)
                 else:
                     logger.info(f"UserMessage: {block}")
         else:
             logger.info(f"Message: {message}")
 
-    return final_result, []
+    return final_result, image_url

@@ -94,19 +94,6 @@ def load_config(mcp_type):
             }
         }    
     
-    elif mcp_type == "tavily":
-        return {
-            "mcpServers": {
-                "tavily-mcp": {
-                    "command": "npx",
-                    "args": ["-y", "tavily-mcp@0.1.4"],
-                    "env": {
-                        "TAVILY_API_KEY": utils.tavily_key
-                    },
-                }
-            }
-        }
-    
     elif mcp_type == "tavily-search":
         return {
             "mcpServers": {

@@ -1,2 +1,3 @@
 claude-agent-sdk
 anyio
+langchain_experimental
