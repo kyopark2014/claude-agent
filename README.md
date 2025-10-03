@@ -207,6 +207,13 @@ streamlit run application/app.py
 
 <img width="400" alt="image" src="https://github.com/user-attachments/assets/21be21c9-c475-412d-a4b1-c63f81d6f1c3" />
 
+### Tips
+
+사용할 수 있는 모델의 확인 방법은 아래와 같습니다.
+
+```text
+aws bedrock list-foundation-models --region=us-west-2 --by-provider anthropic --query "modelSummaries[*].modelId"
+```
 
 
 ## 실행 결과
