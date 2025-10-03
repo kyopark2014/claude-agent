@@ -242,6 +242,23 @@ streamlit run application/app.py
 aws bedrock list-foundation-models --region=us-west-2 --by-provider anthropic --query "modelSummaries[*].modelId"
 ```
 
+날씨와 인터넷 검색은 secreat manager에 key 등록이 필요합니다. [Console-SecretManage](https://us-west-2.console.aws.amazon.com/secretsmanager/listsecrets?region=us-west-2)에서 생성한 API에 대한 Credential을 입력합니다.
+
+<img width="545" height="199" alt="image" src="https://github.com/user-attachments/assets/98f3592a-a69d-440e-8318-31f5f7efe128" />
+
+- 날씨 검색: [openweathermap](https://home.openweathermap.org/api_keys)에 접속하여 API Key를 발급합니다.
+- 인터넷 검색: [Tavily Search](https://app.tavily.com/sign-in)에 접속하여 가입 후 API Key를 발급합니다. 이것은 tvly-로 시작합니다.  
+
+날씨는 "basic" MCP를 선택한 후에 아래와 같이 도시 이름을 이용해 조회합니다.
+
+<img width="653" height="369" alt="image" src="https://github.com/user-attachments/assets/f7fccb0c-8492-421e-96ed-bc8fd4ad6902" />
+
+인터넷 검색은 "tavily-search" MCP를 선택한 후에 아래와 같이 검색합니다.
+
+<img width="652" height="673" alt="image" src="https://github.com/user-attachments/assets/62a02161-dbab-45db-bb1f-783317c09cc4" />
+
+
+
 
 ## 실행 결과
 
