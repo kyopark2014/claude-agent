@@ -174,9 +174,9 @@ def display_chat_messages() -> None:
             if "images" in message:                
                 for url in message["images"]:
                     logger.info(f"url: {url}")
-
-                    file_name = url[url.rfind('/')+1:]
-                    st.image(url, caption=file_name, use_container_width=True)
+                    if url and url.strip():  # 빈 문자열이나 공백만 있는 URL 체크
+                        file_name = url[url.rfind('/')+1:]
+                        st.image(url, caption=file_name, use_container_width=True)
             st.markdown(message["content"])
 
 display_chat_messages()
