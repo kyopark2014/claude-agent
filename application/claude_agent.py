@@ -37,6 +37,16 @@ def add_notification(containers, message):
         containers['notification'][index].info(message)
     index += 1
 
+def add_system_message(containers, message, type):
+    global index
+    index += 1
+
+    if containers is not None:
+        if type == "markdown":
+            containers['notification'][index].markdown(message)
+        elif type == "info":
+            containers['notification'][index].info(message)
+
 os.environ["CLAUDE_CODE_USE_BEDROCK"] = "1"
 os.environ["CLAUDE_CODE_MAX_OUTPUT_TOKENS"] = "4096"
 
@@ -163,7 +173,7 @@ async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
                 if isinstance(block, TextBlock):
                     logger.info(f"--> TextBlock: {block.text}")
                     if chat.debug_mode == 'Enable':
-                        add_notification(containers, f"{block.text}")
+                        add_system_message(containers, f"{block.text}", "markdown")
                     final_result = block.text
                 elif isinstance(block, ToolUseBlock):
                     logger.info(f"--> tool_use_id: {block.id=}, name: {block.name}, input: {block.input}")

@@ -234,8 +234,6 @@ if prompt := st.chat_input("메시지를 입력하세요."):
                     history_mode=history_mode, 
                     containers=containers))
                 
-                st.markdown(response)
-        
             st.session_state.messages.append({
                 "role": "assistant", 
                 "content": response,
@@ -244,8 +242,9 @@ if prompt := st.chat_input("메시지를 입력하세요."):
 
             for url in image_url:
                 logger.info(f"url: {url}")
-                file_name = url[url.rfind('/')+1:]
-                st.image(url, caption=file_name, use_container_width=True)
+                if url and url.strip():  
+                    file_name = url[url.rfind('/')+1:]
+                    st.image(url, caption=file_name, use_container_width=True)
 
         else:
             stream = chat.general_conversation(prompt)
