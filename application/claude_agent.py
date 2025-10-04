@@ -47,8 +47,37 @@ def add_system_message(containers, message, type):
         elif type == "info":
             containers['notification'][index].info(message)
 
+# Claude Code environment variables
 os.environ["CLAUDE_CODE_USE_BEDROCK"] = "1"
 os.environ["CLAUDE_CODE_MAX_OUTPUT_TOKENS"] = "4096"
+
+# WebSocket error prevention
+import tempfile
+
+# WebSocket mocking script generation
+websocket_mock_script = '''
+if (typeof window === 'undefined') {
+    global.window = {
+        WebSocket: function() {
+            return {
+                readyState: 1,
+                close: function() {},
+                send: function() {},
+                addEventListener: function() {},
+                removeEventListener: function() {}
+            };
+        }
+    };
+}
+'''
+
+# Save WebSocket mocking script to temporary file
+with tempfile.NamedTemporaryFile(mode='w', suffix='.js', delete=False) as f:
+    f.write(websocket_mock_script)
+    websocket_mock_file = f.name
+
+# Add WebSocket mocking file to Node.js options
+os.environ["NODE_OPTIONS"] = f"--require {websocket_mock_file}"
 
 def get_model_id():
     models = []
@@ -67,8 +96,9 @@ def load_multiple_mcp_server_parameters(mcp_json: dict):
     if mcpServers is not None:
         for server_name, config in mcpServers.items():
             if config.get("type") == "streamable_http":
+                # Convert streamable_http to http type for Claude Agent SDK compatibility
                 server_info[server_name] = {                    
-                    "transport": "streamable_http",
+                    "type": "http",
                     "url": config.get("url"),
                     "headers": config.get("headers", {})
                 }
@@ -113,7 +143,7 @@ async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
     logger.info(f"mcp_json: {mcp_json}")
 
     server_params = load_multiple_mcp_server_parameters(mcp_json)
-    logger.info(f"server_params: {server_params}")    
+    logger.info(f"server_params: {server_params}")
 
     if isKorean(prompt):
         system = (
