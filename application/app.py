@@ -174,9 +174,9 @@ def display_chat_messages() -> None:
             if "images" in message:                
                 for url in message["images"]:
                     logger.info(f"url: {url}")
-                    if url and url.strip():  # 빈 문자열이나 공백만 있는 URL 체크
-                        file_name = url[url.rfind('/')+1:]
-                        st.image(url, caption=file_name, use_container_width=True)
+
+                    file_name = url[url.rfind('/')+1:]
+                    st.image(url, caption=file_name, use_container_width=True)
             st.markdown(message["content"])
 
 display_chat_messages()
@@ -228,7 +228,7 @@ if prompt := st.chat_input("메시지를 입력하세요."):
                     "notification": [st.empty() for _ in range(1000)]
                 }
 
-                response, image_url = asyncio.run(claude_agent.run_claude_agent(
+                response, image_url = asyncio.run(claude_agent.run_claude_agent_stream(
                     prompt=prompt, 
                     mcp_servers=mcp_servers, 
                     history_mode=history_mode, 

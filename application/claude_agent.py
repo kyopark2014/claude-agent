@@ -238,3 +238,4 @@ async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
             logger.info(f"Message: {message}")
 
     return final_result, image_url
+
