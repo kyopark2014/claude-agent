@@ -184,6 +184,23 @@ def use_aws(service_name, operation_name, parameters, region, label, profile_nam
 [use-aws](./application/use_aws.py)은 [use_aws.py](https://github.com/strands-agents/tools/blob/main/src/strands_tools/use_aws.py)의 MCP 버전입니다. 
 
 
+### CLAUDE.md 의 활용
+
+Claude agent는 자동으로 [CLAUDE.md](https://www.anthropic.com/engineering/claude-code-best-practices)를 로드하여 context의 상단에 배치하므로 반복적으로 적용되는 프롬프트를 활용할때에 유용하게 이용됩니다. Claude Agent SDK에서 CLAUDE.md를 활용할 때에는 아래와 같이 setting_sources를 이용해 적절한 경로를 선택합니다.
+
+```python
+options = ClaudeAgentOptions(
+    system_prompt=system,
+    max_turns=100,
+    permission_mode="default", 
+    model=get_model_id(),
+    mcp_servers=server_params,
+    can_use_tool=prompt_for_tool_approval,
+    setting_sources=["project"]
+)
+```
+
+
 
 ### 사용 준비 
 
