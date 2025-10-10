@@ -228,7 +228,7 @@ if prompt := st.chat_input("메시지를 입력하세요."):
                     "notification": [st.empty() for _ in range(1000)]
                 }
 
-                response, image_url = asyncio.run(claude_agent.run_claude_agent_stream(
+                response, image_url = asyncio.run(claude_agent.run_claude_agent(
                     prompt=prompt, 
                     mcp_servers=mcp_servers, 
                     history_mode=history_mode, 
