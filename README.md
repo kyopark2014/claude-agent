@@ -234,6 +234,28 @@ streamlit run application/app.py
 
 <img width="400" alt="image" src="https://github.com/user-attachments/assets/21be21c9-c475-412d-a4b1-c63f81d6f1c3" />
 
+
+### Permission
+
+[ClaudeAgentOptions](https://docs.claude.com/en/api/agent-sdk/python#claudeagentoptions)에서 permission_mode를 설정할 때에 "default", "acceptEdits", "plan", "bypassPermissions"을 선택할 수 있습니다. 
+
+- "plan": 모든 도구 사용에 대해 계획을 세우고 사용자 승인을 받습니다.
+- "acceptEdits": 파일 편집 작업은 자동 승인, 다른 도구들은 권한 검사 적용합니다.
+- "bypassPermissions": 모든 도구 사용을 자동 승인합니다.
+- "default": 기본 권한 모드로 모든 도구에 대해 권한 프롬프트 표시합니다.
+
+이때 설정을 "default"로 하고, weather tool을 이용하려고 하면 아래와 같은 에러를 받습니다.
+
+```python
+UserMessage(content=[ToolResultBlock(tool_use_id='toolu_bdrk_01RqbGiZUv1v2vK2fjLsaaGV', content="Claude requested permissions to use mcp__search__get_weather_info, but you haven't granted it yet.", is_error=True)], parent_tool_use_id=None)
+```
+
+[Handling Permissions](https://docs.claude.com/en/api/agent-sdk/permissions)
+
+
+
+
+
 ### Tips
 
 사용할 수 있는 모델의 확인 방법은 아래와 같습니다.
