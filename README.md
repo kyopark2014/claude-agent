@@ -91,26 +91,38 @@ Agent에 요청을 query를 이용해 요청하면, prompt에 있는 사용자 �
 
 ```python
 final_result = ""    
-async for message in query(prompt=prompt, options=options):
-    if isinstance(message, SystemMessage):
-        data = message.data
-        if "tools" in data:
-            tools = data["tools"]
-            add_notification(containers, f"Tools: {tools}")
+async with ClaudeSDKClient(options=options) as client:
+    await client.query(prompt)
 
-    elif isinstance(message, AssistantMessage):
-        for block in message.content:
-            if isinstance(block, TextBlock):
-                add_notification(containers, f"{block.text}")
-                final_result = block.text
-
-    elif isinstance(block, ToolUseBlock):
-        add_notification(containers, f"Tool name: {block.name}, input: {block.input}")
-
-    elif isinstance(message, UserMessage):
-        for block in message.content:
-            if isinstance(block, ToolResultBlock):
-                add_notification(containers, f"Tool result: {block.content}")                
+    async for message in client.receive_response():
+        if isinstance(message, SystemMessage):
+            subtype = message.subtype
+            data = message.data
+            if subtype == "init":
+                session_id = message.data.get('session_id')
+            if "tools" in data:
+                tools = data["tools"]
+                add_notification(containers, f"Tools: {tools}")
+        elif isinstance(message, AssistantMessage):
+            for block in message.content:
+                if isinstance(block, TextBlock):
+                    add_system_message(containers, f"{block.text}", "markdown")
+                    final_result = block.text
+                elif isinstance(block, ToolUseBlock):
+                    add_notification(containers, f"Tool name: {block.name}, input: {block.input}")
+                elif isinstance(block, ToolResultBlock):
+                    add_notification(containers, f"Tool result: {block.content}")                
+        elif isinstance(message, UserMessage):
+            for block in message.content:
+                if isinstance(block, ToolResultBlock):
+                    add_notification(containers, f"Tool result: {block.content}")                    
+                    if isinstance(block.content, list):
+                        for item in block.content:
+                            if isinstance(item, dict) and "text" in item:
+                                if "path" in item['text']:
+                                    json_path = json.loads(item['text'])
+                                    path = json_path.get('path', "")
+                                    image_url.append(path)
 ```
 
 ### Session Management
