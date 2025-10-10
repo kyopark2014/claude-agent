@@ -13,13 +13,17 @@
 ```python
 from claude_agent_sdk import (
     query,
+    ClaudeSDKClient,
     ClaudeAgentOptions,
     AssistantMessage,    
     SystemMessage,
     UserMessage,
     TextBlock,
     ToolResultBlock,
-    ToolUseBlock    
+    ToolUseBlock,
+    ToolPermissionContext,
+    PermissionResultAllow,
+    PermissionResultDeny
 )
 ```
 
