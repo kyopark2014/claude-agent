@@ -250,10 +250,27 @@ streamlit run application/app.py
 UserMessage(content=[ToolResultBlock(tool_use_id='toolu_bdrk_01RqbGiZUv1v2vK2fjLsaaGV', content="Claude requested permissions to use mcp__search__get_weather_info, but you haven't granted it yet.", is_error=True)], parent_tool_use_id=None)
 ```
 
-[Handling Permissions](https://docs.claude.com/en/api/agent-sdk/permissions)
+[Handling Permissions](https://docs.claude.com/en/api/agent-sdk/permissions)의 [canUseTool](https://docs.claude.com/en/api/agent-sdk/permissions#canusetool)을 이용합니다. 여기서는 streamlit을 쓰므로 approval을 항상 accept으로 하였습니다. 이때의 구현은 아래와 같습니다.
 
+```python
+async def prompt_for_tool_approval(tool_name: str, input_params: dict, context: ToolPermissionContext):
+    result = PermissionResultAllow(updated_input=input_params)
 
-
+options = ClaudeAgentOptions(
+    system_prompt=system,
+    max_turns=100,
+    permission_mode="default", 
+    model=get_model_id(),
+    mcp_servers=server_params,
+    can_use_tool=prompt_for_tool_approval
+)
+async with ClaudeSDKClient(options=options) as client:
+    await client.query(prompt)
+    if isinstance(message, AssistantMessage):
+        for block in message.content:
+            if isinstance(block, TextBlock):
+                logger.info(f"--> TextBlock: {block.text}")
+```            
 
 
 ### Tips
