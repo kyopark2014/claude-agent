@@ -368,3 +368,6 @@ aws bedrock list-foundation-models --region=us-west-2 --by-provider anthropic --
 
 [Streaming Input](https://docs.claude.com/en/api/agent-sdk/streaming-vs-single-mode)
 
+[Claude - Skills](https://github.com/anthropics/skills)
+
+
