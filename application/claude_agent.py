@@ -152,17 +152,17 @@ async def prompt_for_tool_approval(tool_name: str, input_params: dict, context: 
             logger.info(f"{key}: {display_value}")
             params += f"{key}: {display_value}\n"
 
-    # Get user approval
-    # answer = input("\n   Approve this tool use? (y/n): ")    
-    # if answer.lower() in ['y', 'yes']:
-    #     logger.info("✅ Approved")
-    #     return PermissionResultAllow(updated_input=input_params)
-    # else:
-    #     logger.info("❌ Denied")
-    #     return PermissionResultDeny(message="User denied permission for this tool")
-    
-    # Auto-approve for streamlit app
-    return PermissionResultAllow(updated_input=input_params)
+    try:
+        return PermissionResultAllow(updated_input=input_params)
+    except Exception as e:
+        logger.error(f"PermissionResultAllow error: {e}")
+        # Fallback: try with behavior parameter
+        try:
+            return PermissionResultAllow(behavior="allow", updated_input=input_params)
+        except Exception as e2:
+            logger.error(f"PermissionResultAllow with behavior error: {e2}")
+            # Last resort: return a simple dict-like object
+            return {"behavior": "allow", "updated_input": input_params}
 
 async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
     global index, session_id
@@ -199,7 +199,7 @@ async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
         options = ClaudeAgentOptions(
             system_prompt=system,
             max_turns=100,
-            permission_mode="default", # "default", "acceptEdits", "plan", "bypassPermissions"
+            permission_mode="bypassPermissions", # "default", "acceptEdits", "plan", "bypassPermissions"
             model=get_model_id(),
             mcp_servers=server_params,
             resume=session_id,
@@ -210,7 +210,7 @@ async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
        options = ClaudeAgentOptions(
             system_prompt=system,
             max_turns=100,
-            permission_mode="default", 
+            permission_mode="bypassPermissions", 
             model=get_model_id(),
             mcp_servers=server_params,
             can_use_tool=prompt_for_tool_approval,
