@@ -199,7 +199,7 @@ async def run_claude_agent(prompt, mcp_servers, history_mode, containers):
         options = ClaudeAgentOptions(
             system_prompt=system,
             max_turns=100,
-            permission_mode="bypassPermissions", # "default", "acceptEdits", "plan", "bypassPermissions"
+            permission_mode="default", # "default", "acceptEdits", "plan", "bypassPermissions"
             model=get_model_id(),
             mcp_servers=server_params,
             resume=session_id,
