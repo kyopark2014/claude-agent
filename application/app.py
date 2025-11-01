@@ -64,7 +64,7 @@ with st.sidebar:
         st.subheader("⚙️ MCP Config")
 
         mcp_options = [
-            "basic", "kb-retriever", "use-aws", "aws document",
+            "basic", "kb-retriever", "use-aws", "aws document", "trade_info",
             "repl coder", "tavily-search", "사용자 설정"
         ]
         mcp_selections = {}
