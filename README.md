@@ -370,4 +370,6 @@ aws bedrock list-foundation-models --region=us-west-2 --by-provider anthropic --
 
 [Claude - Skills](https://github.com/anthropics/skills)
 
+[Claude Code-style Skill System for Strands Agents](https://github.com/aws-samples/sample-deep-insight/blob/main/docs/features/skill-system.md)
 
+[strands-skill-system](https://github.com/dongjin-ml/strands-skill-system)
