@@ -125,6 +125,14 @@ async with ClaudeSDKClient(options=options) as client:
                                     image_url.append(path)
 ```
 
+### Skills
+
+스킬 위치는 settingSources/setting_sources 구성을 기반으로 파일시스템에서 로딩합니다.
+
+- 프로젝트 스킬 (.claude/skills/): setting_sources에 "project"가 포함될 때 로드됩니다.
+- 사용자 스킬 (~/.claude/skills/): setting_sources에 "user"가 포함될 때 로드됨
+
+
 ### Session Management
 
 이전 history를 session으로 관리할 수 있습니다. System message에서 아래와 같이 session-id를 가져올 수 있습니다.
